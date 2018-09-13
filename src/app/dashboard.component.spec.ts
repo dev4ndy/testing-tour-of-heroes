@@ -1,17 +1,16 @@
 import { CommonModule, Location } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DebugElement } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, TestBed, tick, discardPeriodicTasks } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { Router, Routes, ActivatedRoute, Params } from '@angular/router';
+import { Router, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from './dashboard.component';
 import { HeroDetailComponent } from './hero-detail.component';
 import { HeroSearchComponent } from './hero-search.component';
 import { HeroService } from './hero.service';
-import { defaultHeroes, responseHeroes, MockHeroService} from './test-mock.help';
-import { Subject } from 'rxjs';
+import { defaultHeroes, MockHeroService, responseHeroes } from './test-mock.help';
 
 describe('Test for DashBoardComponent', () => {
     // let's instanciate the component
@@ -20,15 +19,13 @@ describe('Test for DashBoardComponent', () => {
     let router: Router;
     let location: Location;
     let debugElement: DebugElement;
-    let params: Params;
 
     const routes: Routes = [
         { path: 'detail/:id', component: HeroDetailComponent }
     ];
 
     //Arrange
-    beforeEach(async(() => {
-        params = new Subject<Params>();
+    beforeEach(async(() => {        
         TestBed.configureTestingModule({
             imports: [CommonModule, HttpClientTestingModule, RouterTestingModule.withRoutes(routes), FormsModule], //If our component uses routing, httpclient
             declarations: [DashboardComponent, HeroDetailComponent, HeroSearchComponent], //Here we put all the components that use our component. 
@@ -36,7 +33,6 @@ describe('Test for DashBoardComponent', () => {
                 //Here we can inject the dependencies that our component needs.
                 //If our dependecies are services, we can create a simulated service.
                 { provide: HeroService, useValue: MockHeroService },
-                { provide: ActivatedRoute, useValue: { params: params }}
             ]
         }).compileComponents();
     }));

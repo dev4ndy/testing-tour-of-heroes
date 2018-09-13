@@ -19,8 +19,11 @@ export const MockHeroService = {
         responseHeroes = heroes;
     },
     getHero: (id: number) => {
-        defaultHeroes.forEach(hero => {
-
-        });
+        for (let i = 0; i <= defaultHeroes.length; i++) {
+            let hero = defaultHeroes[i];
+            if (hero.id == id) {
+                return of(hero);
+            }
+        };
     }
 };

@@ -1,16 +1,22 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Params } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HeroDetailComponent } from './hero-detail.component';
 import { HeroService } from './hero.service';
-import { responseHeroes, defaultHeroes, MockHeroService } from './test-mock.help';
+import { MockActivatedRoute } from './mocks/activate-route.mock';
+import { MockHeroService, defaultHeroes } from './test-mock.help';
+import { Subject, of } from 'rxjs';
 
 describe('Test for HeroDetailComponet', () => {
     let heroDetailComponent: HeroDetailComponent;
     let fixture: ComponentFixture<HeroDetailComponent>;
-
+    let location: Location;
+    let activeRoute: MockActivatedRoute;
+    let params: Params;
+    let heroService: HeroService;
     //Arrange
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -19,6 +25,13 @@ describe('Test for HeroDetailComponet', () => {
             providers: [
                 //Here we can inject the dependencies that our component needs.
                 //If our dependecies are services, we can create a simulated service.
+                //{ provide: ActivatedRoute, useValue: activeRoute },
+                // { provide: ActivatedRoute, useValue: { params: params } },
+                {
+                    provide: ActivatedRoute, useValue: {
+                        params: of({ id: 1 })
+                    }
+                },
                 { provide: HeroService, useValue: MockHeroService },
             ]
         }).compileComponents();
@@ -26,9 +39,12 @@ describe('Test for HeroDetailComponet', () => {
 
     //Arrange
     beforeEach(() => {
+        heroService = TestBed.get(HeroService);
+        //params = new Subject<Params>();
+        //activeRoute = new MockActivatedRoute();
+        location = TestBed.get(Location);
         fixture = TestBed.createComponent(HeroDetailComponent);
         heroDetailComponent = fixture.componentInstance;
-
         //fixture.detectChanges();// Comments, so that it does run the of method ngOnInit();
     });
 
@@ -44,27 +60,24 @@ describe('Test for HeroDetailComponet', () => {
 
     describe('When the ngOnInit method starts', () => {
         it('should call function getHero', () => {
-            fixture.detectChanges();
             spyOn(heroDetailComponent, 'getHero');
+            fixture.detectChanges();
             expect(heroDetailComponent.getHero).toHaveBeenCalled();
         });
+    });
 
-        // it('should the heroes variable be great than or equal zero', () => {
-        //     MockHeroService.setHeroes(defaultHeroes);
-        //     //responseHeroes = defaultHeroes; //Simulated with some heroe
-        //     fixture.detectChanges();
-        //     expect(dashBoardComponent.heroes.length).toEqual(responseHeroes.length);
-        //     MockHeroService.setHeroes([]);
-        //     //responseHeroes = []; //Simulate empty
-        //     fixture.detectChanges();
-        //     expect(dashBoardComponent.heroes.length).toBeGreaterThanOrEqual(0);
-        // });
+    describe('When the function getHero it run', () => {
+        it('should the hero varibale be defined', () => {
+            spyOn(heroService, 'getHero').and.callThrough();
+            MockHeroService.setHeroes(defaultHeroes);            
+            //activeRoute.testParams = { id: 1234 };
+            //fixture.detectChanges();            
+            heroDetailComponent.getHero();
 
-        // it('should to render all heroes in page', () => {
-        //     MockHeroService.setHeroes(defaultHeroes);
-        //     fixture.detectChanges();
-        //     const heroesBoxDivs = debugElement.queryAll(By.css('.test-go-to-detail'));
-        //     expect(heroesBoxDivs.length).toEqual(responseHeroes.length);
-        // });
+            expect(heroService.getHero).toHaveBeenCalled();
+            // 
+            //heroDetailComponent.getHero();
+            // tick to make sure the async observable resolves*/
+        });
     });
 });
