@@ -26,7 +26,6 @@ export class HeroDetailComponent implements OnInit {
     let id;
     this.route.params.subscribe(params => {      
       id = params['id'];
-      console.log(id);
     });
 
     this.heroService.getHero(id)

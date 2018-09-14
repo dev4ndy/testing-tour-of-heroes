@@ -65,12 +65,11 @@ describe('Test for DashBoardComponent', () => {
         });
 
         it('should the heroes variable be great than or equal zero', () => {
-            MockHeroService.setHeroes(defaultHeroes);
-            //responseHeroes = defaultHeroes; //Simulated with some heroe
+            MockHeroService.setHeroes(defaultHeroes); //Simulated with some heroe 
             fixture.detectChanges();
             expect(dashBoardComponent.heroes.length).toEqual(responseHeroes.length);
-            MockHeroService.setHeroes([]);
-            //responseHeroes = []; //Simulate empty
+           
+            MockHeroService.setHeroes([]); //Simulate empty
             fixture.detectChanges();
             expect(dashBoardComponent.heroes.length).toBeGreaterThanOrEqual(0);
         });
