@@ -24,7 +24,7 @@ export class HeroDetailComponent implements OnInit {
 
   getHero(): void {
     let id;
-    this.route.params.subscribe(params => {      
+    this.route.params.subscribe(params => {
       id = params['id'];
     });
 
@@ -34,12 +34,15 @@ export class HeroDetailComponent implements OnInit {
       });
   }
 
-  goBack(): void {
+  goBack(): void { // i dont know test this function.
     this.location.back();
   }
 
   save(): void {
     this.heroService.updateHero(this.hero)
-      .subscribe(() => this.goBack());
+      .subscribe(() => {
+        this.goBack()
+      }
+      );
   }
 }

@@ -11,6 +11,7 @@ import { HeroDetailComponent } from './hero-detail.component';
 import { HeroSearchComponent } from './hero-search.component';
 import { HeroService } from './hero.service';
 import { defaultHeroes, MockHeroService, responseHeroes } from './test-mock.help';
+import { Hero } from './hero';
 
 describe('Test for DashBoardComponent', () => {
     // let's instanciate the component

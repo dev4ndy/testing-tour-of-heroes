@@ -21,8 +21,7 @@ export class HeroSearchComponent implements OnInit {
   private searchTerms = new Subject<string>();
 
   constructor(
-    private heroSearchService: HeroSearchService,
-    private router: Router
+    private heroSearchService: HeroSearchService
   ) {}
 
   search(term: string): void {
@@ -50,8 +49,8 @@ export class HeroSearchComponent implements OnInit {
     );
   }
 
-  gotoDetail(hero: Hero): void {
-    const link = ['/detail', hero.id];
-    this.router.navigate(link);
-  }
+  // gotoDetail(hero: Hero): void {
+  //   const link = ['/detail', hero.id];
+  //   this.router.navigate(link);
+  // }
 }

@@ -1,7 +1,7 @@
 import { Hero } from "./hero";
-import { of } from "rxjs";
+import { of, observable } from "rxjs";
 
-export const defaultHeroes = [
+export let defaultHeroes = [
     { id: 1, name: 'Andres' },
     { id: 2, name: 'Harold' },
     { id: 3, name: 'Daniel 1' },
@@ -25,5 +25,13 @@ export const MockHeroService = {
                 return of(hero);
             }
         };
+    }, 
+    updateHero: (hero: Hero) => {
+        defaultHeroes = defaultHeroes.map(_hero => {
+            if(_hero.id = hero.id){
+                return hero;
+            }
+        });
+        return of(null);    
     }
 };
