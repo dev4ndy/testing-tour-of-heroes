@@ -15,7 +15,7 @@ export class HeroesComponent implements OnInit {
   error: any;
   showNgFor = false;
 
-  constructor(private router: Router, private heroService: HeroService) {}
+  constructor(private router: Router, private heroService: HeroService) { }
 
   getHeroes(): void {
     this.heroService
@@ -23,13 +23,23 @@ export class HeroesComponent implements OnInit {
       .subscribe(
         heroes => (this.heroes = heroes),
         error => (this.error = error)
-      )
+      );
   }
 
-  addHero(): void {
-    this.addingHero = true;
-    this.selectedHero = null;
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
   }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero).subscribe();
+  }
+
 
   close(savedHero: Hero): void {
     this.addingHero = false;

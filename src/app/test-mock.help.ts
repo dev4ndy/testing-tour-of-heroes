@@ -1,7 +1,7 @@
 import { Hero } from "./hero";
-import { of, observable } from "rxjs";
+import { of } from "rxjs";
 
-export let defaultHeroes = [
+export const defaultHeroes = [
     { id: 1, name: 'Andres' },
     { id: 2, name: 'Harold' },
     { id: 3, name: 'Daniel 1' },
@@ -16,22 +16,26 @@ export const MockHeroService = {
         return of(responseHeroes);
     },
     setHeroes: (heroes) => { // it's doesn't a method of hero service, this is simply help for setting the variable heroes.
-        responseHeroes = heroes;
+        responseHeroes = [... heroes]; //copy only value, if you equal usally for example (responseHeroes = heores) this is a reference in memory. 
     },
     getHero: (id: number) => {
-        for (let i = 0; i <= defaultHeroes.length; i++) {
-            let hero = defaultHeroes[i];
+        for (let i = 0; i < responseHeroes.length; i++) {
+            let hero = responseHeroes[i];
             if (hero.id == id) {
-                return of(hero);
+                let _hero = new Hero();
+                _hero.id = hero.id;
+                _hero.name = hero.name;
+                return of(_hero);
             }
         };
     }, 
     updateHero: (hero: Hero) => {
-        defaultHeroes = defaultHeroes.map(_hero => {
-            if(_hero.id = hero.id){
-                return hero;
+        for(let i = 0; i < responseHeroes.length; i++){
+            let _hero = responseHeroes[i];            
+            if(_hero.id == hero.id){
+                responseHeroes[i] = hero;
             }
-        });
+        }
         return of(null);    
     }
 };

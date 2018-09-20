@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { HeroDetailComponent } from './hero-detail.component';
 import { HeroService } from './hero.service';
-import { defaultHeroes, MockHeroService } from './test-mock.help';
+import { defaultHeroes, MockHeroService, responseHeroes } from './test-mock.help';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -19,6 +19,9 @@ describe('Test for HeroDetailComponet', () => {
     let param = { id: 1 };
     let debugElement: DebugElement;
     let upperCase = new UpperCasePipe();
+    let element;
+    let input: DebugElement;
+
 
     //Arrange
     beforeEach(async(() => {
@@ -45,8 +48,13 @@ describe('Test for HeroDetailComponet', () => {
         location = TestBed.get(Location);
         fixture = TestBed.createComponent(HeroDetailComponent);
         debugElement = fixture.debugElement;
+        element = debugElement.nativeElement;
         heroDetailComponent = fixture.componentInstance;
         //fixture.detectChanges();// Comments, so that it does run the of method ngOnInit();
+    });
+
+    afterEach(() => {
+        TestBed.resetTestingModule();
     });
 
     it('should create', () => {
@@ -107,7 +115,7 @@ describe('Test for HeroDetailComponet', () => {
             button.triggerEventHandler('click', null);
             expect(heroDetailComponent.goBack).toHaveBeenCalled();
             expect(heroDetailComponent.goBack).toHaveBeenCalledTimes(1);
-        }); 
+        });
 
         it('should call function back of Location', () => {
             spyOn(location, 'back');
@@ -127,20 +135,20 @@ describe('Test for HeroDetailComponet', () => {
             expect(heroDetailComponent.save).toHaveBeenCalledTimes(1);
         });
 
-        it('should update name of the hero', () => {
-            spyOn(heroService, 'updateHero').and.callThrough();
+        it('should update name of the hero', fakeAsync(() => {
             fixture.detectChanges();
+            tick();
             /**
              * First we change the name at input
              */
-            let input = debugElement.query(By.css('input'));
+            input = debugElement.query(By.css('input'));
             input.nativeElement.value = 'Andres 2';
-            input.nativeElement.dispatchEvent(new Event('input')); //emmit event from input for detect changes in ngmodel
+            input.nativeElement.dispatchEvent(new Event('input'));//emmit event from input for detect changes in ngmodel
             heroDetailComponent.save();
-            expect(heroDetailComponent.hero).toEqual(defaultHeroes[0]); 
-        });
+            expect(heroDetailComponent.hero).toEqual(responseHeroes[0]);
+        }));
 
-        it('should call function goBack()', () =>{
+        it('should call function goBack()', () => {
             spyOn(heroDetailComponent, 'goBack');
             fixture.detectChanges();
             heroDetailComponent.save();

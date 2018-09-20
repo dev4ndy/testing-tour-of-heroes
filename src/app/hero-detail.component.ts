@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Hero } from './hero';
 import { HeroService } from './hero.service';
@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./hero-detail.component.css']
 })
 export class HeroDetailComponent implements OnInit {
-  @Input() hero: Hero;
+  hero: Hero;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +42,6 @@ export class HeroDetailComponent implements OnInit {
     this.heroService.updateHero(this.hero)
       .subscribe(() => {
         this.goBack()
-      }
-      );
+      });
   }
 }

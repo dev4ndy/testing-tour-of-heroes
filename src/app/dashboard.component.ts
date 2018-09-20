@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero';
 import { HeroService } from './hero.service';
+import { Route, Router } from '@angular/router';
 
 
 @Component({
@@ -12,7 +13,8 @@ export class DashboardComponent implements OnInit {
   heroes: Hero[];
 
   constructor(
-    private heroService: HeroService) {
+    private heroService: HeroService, 
+    private router: Router) {
   }
 
   ngOnInit(): void {
